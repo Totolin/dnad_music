@@ -7,32 +7,35 @@ class SongsReader:
         self.content = self.read()
 
         if (previous == None):
-        	self.index = 0
+            self.index = 0
         else:
-        	self.index = previous
+            self.index = previous
 
     def read(self):
-    	songs = []
-    	with open(self.songs_path, "r") as ins:
-    		for line in ins:
-        		# Split each line by it's separator
-        		parts = line.split("<SEP>")
+        songs = []
+        with open(self.songs_path, "r") as ins:
+            for line in ins:
+                # Split each line by it's separator
+                parts = line.split("<SEP>")
 
-        		# Create the song dict
-        		song = {}
-        		song['track_id'] = parts[0]
-        		song['song_id']  = parts[1]
-        		song['artist'] = parts[2]
-        		song['title'] = parts[3].strip('\n')
+                # Create the song dict
+                song = {}
+                song['track_id'] = parts[0]
+                song['song_id']  = parts[1]
+                song['artist'] = parts[2]
+                song['title'] = parts[3].strip('\n')
 
-        		songs.append(song)
+                songs.append(song)
 
         return songs
  
+    def has_next(self):
+        return len(self.content) > 0
+        
     def next(self):
-    	song = self.content[self.index]
-    	self.index+=1
-    	return song
+        song = self.content[self.index]
+        self.index+=1
+        return song
 
 
 #reader = SongsReader('unique_tracks.txt', None)
