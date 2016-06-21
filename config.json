@@ -1,0 +1,15 @@
+{
+	"files": {
+		"songs": "files/unique_tracks.txt"
+	},
+	"spotify": {
+		"client_id": "1558f82001374593b4146feb191b0d0f",
+		"client_secret": "973993ea96c44e7bb74b0c0844a35be1"
+	},
+	"mongo": {
+		"url": "localhost",
+		"port": 27017,
+		"database": "Music",
+		"collection": "Raw"
+	}
+}
