@@ -1,1 +1,3 @@
-# dnad_music
+## dnad_music
+
+Music analyzer
