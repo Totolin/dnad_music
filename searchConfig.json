@@ -1,0 +1,40 @@
+{
+    "acousticness" : {
+        "value" : 0.2,
+        "array" : []
+    },
+
+    "danceability" : {
+        "value" : 0.2,
+        "array" : []
+    },
+
+    "energy" : {
+        "value" : 0.2,
+        "array" : []
+    },
+
+    "instrumentalness" : {
+        "value" : 0.2,
+        "array" : []
+    },
+
+    "loudness" : {
+        "value" : -7,
+        "array" : []
+    },
+
+    "speechiness" : {
+        "value" : 0.2,
+        "array" : []
+    },
+    "tempo" : {
+        "value" : 40,
+        "array" : []
+    },
+    "valence" : {
+        "value" : 0.2,
+        "array" : []
+    }
+
+}
