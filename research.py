@@ -1,6 +1,7 @@
 from Queue import Queue
 from threading import Thread
 from random import randrange
+from time import sleep
 
 class Worker(Thread):
     def __init__(self, tasks):
@@ -10,19 +11,33 @@ class Worker(Thread):
         self.start()
     
     def run(self):
-	    while True:
-	        func, args, kargs = self.tasks.get()
-	        try: func(*args, **kargs)
-	        except Exception, e: print e
-	        self.tasks.task_done()
+        while True:
+            func, args, kargs = self.tasks.get()
+            try: func(*args, **kargs)
+            except Exception, e: print e
+            self.tasks.task_done()
 
 
-def worker_job(name, spotify, mongo):
-	# This is what the worker (1 thread) will execute
-	# Using the song's name, send a request to Spotify
-	# result = spotify.get_song(name)
-	print name
-	print spotify
+def worker_job(song, spotify, mongo):
+    # This is what the worker (1 thread) will execute
+    # Using the song's name, send a request to Spotify
+    sp_qr = song["artist"] + ' - ' + song["title"]
+    result = spotify.get_song(sp_qr)
+
+    # Error while calling API
+    if result is None:
+        print "Error while researching song: " + name
+        return
+
+    # Song not found
+    if result is {}:
+        print "Song not found in Spotify: " + name
+        return
+    
+    print result
+    # Insert received song into the database
+    mongo.insert(result)
+
 
 class ThreadPool:
     #Pool of threads consuming tasks from a queue
@@ -41,28 +56,30 @@ class ThreadPool:
 class Researcher:
 
     def __init__(self, generator, spotify, database):
-    	self.generator = generator
-    	self.spotify = spotify
-    	self.database = database
+        self.generator = generator
+        self.spotify = spotify
+        self.database = database
 
-    def create(self):
-	    delays = [randrange(1, 10) for i in range(100)]
-	    
-	    from time import sleep
-	    def wait_delay(d):
-	        print 'sleeping for (%d)sec' % d
-	        sleep(d)
-	    
-	    # 1) Init a Thread pool with the desired number of threads
-	    pool = ThreadPool(20)
-	    
-	    for i, d in enumerate(delays):
-	        # print the percentage of tasks placed in the queue
-	        print '%.2f%c' % ((float(i)/float(len(delays)))*100.0,'%')
-	        
-	        # 2) Add the task to the queue
-	        pool.add_task(wait_delay, 'asd', i)
-	    
-	    # 3) Wait for completion
-	    pool.wait_completion()
+    def start(self):
+
+        # Init a Thread pool with the desired number of threads
+        pool = ThreadPool(20)
+        
+        while self.generator.has_next():
+            # print the percentage of tasks placed in the queue
+            #print '%.2f%c' % ((float(i)/float(len(delays)))*100.0,'%')
+
+            pool.add_task(
+                # Thread job
+                worker_job,
+                # Next song name
+                self.generator.next(),
+                # Spotify API Caller
+                self.spotify,
+                # MongoDB interface
+                self.database
+            )
+        
+        # Wait for completion
+        pool.wait_completion()
 
