@@ -19,16 +19,26 @@ class SpotifyConnect:
         return sp_oauth.get_access_token()
 
     def get_song(self, name):
+        # Get all results from Spotify
         results = self.api.search(q=name, limit=1)
+
+        # Check if we got any
         if len(results['tracks']['items']) <= 0:
             return {}
+
+        # Extract the song we are interested in
         song = results['tracks']['items'][0]
+
+        if (len(song) < 2):
+            return {}
+
+        # Get the song's features from Spotify
         id = song['id']
         features = self.api.audio_features(tracks=[id])
         song['features'] = features[0]
 
-        with open('data.json', 'a') as outfile:
-            json.dump(song, outfile, indent=4)
+        # Convert it's ID to _ID (for uniqueness in mongo)
+        song['_id'] = id
 
         return song
 

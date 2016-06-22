@@ -30,7 +30,7 @@ def worker_job(song, spotify, mongo):
         return
 
     # Song not found
-    if result is {}:
+    if len(result) < 2:
         print "Song not found in Spotify: " + name
         return
     
