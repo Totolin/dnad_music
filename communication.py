@@ -1,31 +1,20 @@
-import socketio
-import eventlet
-from flask import Flask, render_template
+from flask import Flask, jsonify
 
-sio = socketio.Server()
-app = Flask(__name__)
+def create():
+    app = Flask(__name__)
 
-@app.route('/')
-def index():
-    """Serve the client-side application."""
-    print 'Index'
+    @app.route('/recommend', methods=['POST'])
+    def create_task():
+        if not request.json or not 'song' in request.json:
+            abort(400)
+        
+        # request.json contains the "song" key
 
-@sio.on('connect', namespace='/chat')
-def connect(sid, environ):
-    print("connect ", sid)
+        # get song recommendations, return 200
+        # or return != 200 if there's an error
+        tasks.append(task)
 
-@sio.on('chat message', namespace='/chat')
-def message(sid, data):
-    print("message ", data)
-    sio.emit(sid, 'reply')
+        return jsonify({'task': task}), 200
 
-@sio.on('disconnect', namespace='/chat')
-def disconnect(sid):
-    print('disconnect ', sid)
+    return app
 
-if __name__ == '__main__':
-    # wrap Flask application with engineio's middleware
-    app = socketio.Middleware(sio, app)
-
-    # deploy as an eventlet WSGI server
-    eventlet.wsgi.server(eventlet.listen(('127.0.0.1', 3333)), app)

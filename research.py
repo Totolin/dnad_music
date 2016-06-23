@@ -3,13 +3,14 @@ from threading import Thread
 from random import randrange
 from time import sleep
 
+
 class Worker(Thread):
     def __init__(self, tasks):
         Thread.__init__(self)
         self.tasks = tasks
         self.daemon = True
         self.start()
-    
+
     def run(self):
         while True:
             func, args, kargs = self.tasks.get()
@@ -26,32 +27,34 @@ def worker_job(song, spotify, mongo):
 
     # Error while calling API
     if result is None:
-        print "Error while researching song: " + name
+    #    print "[ERROR] Researching song: " + song["title"]
         return
 
     # Song not found
     if len(result) < 2:
-        print "Song not found in Spotify: " + name
+    #    print "[ERROR] Song not found in Spotify: " + song["title"]
         return
-    
-    print result
+
+    #print 'Succesfully researched song: ' + song["artist"] + ' - ' + song["title"]
+
     # Insert received song into the database
     mongo.insert(result)
 
 
 class ThreadPool:
-    #Pool of threads consuming tasks from a queue
+    # Pool of threads consuming tasks from a queue
     def __init__(self, num_threads):
         self.tasks = Queue(num_threads)
         for _ in range(num_threads): Worker(self.tasks)
 
     def add_task(self, func, *args, **kargs):
-        #Add a task to the queue
+        # Add a task to the queue
         self.tasks.put((func, args, kargs))
 
     def wait_completion(self):
-        #Wait for completion of all the tasks in the queue
+        # Wait for completion of all the tasks in the queue
         self.tasks.join()
+
 
 class Researcher:
 
@@ -61,6 +64,9 @@ class Researcher:
         self.database = database
 
     def start(self):
+
+        '''
+        TODO remove comments and remove the sleep cycle debug
 
         # Init a Thread pool with the desired number of threads
         pool = ThreadPool(20)
@@ -82,4 +88,8 @@ class Researcher:
         
         # Wait for completion
         pool.wait_completion()
+        '''
+        while True:
+            sleep(5)
+            print 'Still sleeping'
 
