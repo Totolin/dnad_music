@@ -27,15 +27,15 @@ def worker_job(song, spotify, mongo):
 
     # Error while calling API
     if result is None:
-    #    print "[ERROR] Researching song: " + song["title"]
+        print "[ERROR] Researching song: " + song["title"]
         return
 
     # Song not found
     if len(result) < 2:
-    #    print "[ERROR] Song not found in Spotify: " + song["title"]
+        print "[ERROR] Song not found in Spotify: " + song["title"]
         return
 
-    #print 'Succesfully researched song: ' + song["artist"] + ' - ' + song["title"]
+    print 'Succesfully researched song: ' + song["artist"] + ' - ' + song["title"]
 
     # Insert received song into the database
     mongo.insert(result)
@@ -65,9 +65,6 @@ class Researcher:
 
     def start(self):
 
-        '''
-        TODO remove comments and remove the sleep cycle debug
-
         # Init a Thread pool with the desired number of threads
         pool = ThreadPool(20)
         
@@ -88,8 +85,4 @@ class Researcher:
         
         # Wait for completion
         pool.wait_completion()
-        '''
-        while True:
-            sleep(5)
-            print 'Still sleeping'
 
