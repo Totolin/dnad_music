@@ -37,14 +37,12 @@ if __name__ == '__main__':
     )
 
     # Create a music researcher (grab songs from the internet)
-    # researcher = Researcher(reader, spotify, mongo)
-    # res_proc = Process(target=researcher.start)
-    # res_proc.start()
+    researcher = Researcher(reader, spotify, mongo)
+    res_proc = Process(target=researcher.start)
+    res_proc.start()
 
     # Create a music analyzer
     analyzer = Analyzer(mongo, spotify, config["search"])
-    #songs = analyzer.recommend(song)
-    #utils.pretty_print(songs)
 
     # Create the communication API for the WebServer
     app = communication.create(analyzer)

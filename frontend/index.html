@@ -142,27 +142,24 @@
           $('#buttonStart').on('click', function() {
               $.ajax({
               type: "POST",
-              url: 'http://httpbin.org/post',
-              headers: {
-                'Access-Control-Request-Headers' : '*'
-              },
-              data: { song: $('#songInput').val()},
+              url: 'http://localhost:5000/recommend',
+              data: JSON.stringify({ song: $('#songInput').val()}),
               contentType: "application/json; charset=utf-8",
               beforeSend: function() {
                 //$('body').addClass('loading');
               },  
               success: function (data, textStatus, xhr) {
                   console.log(data.data);
-                  for (var i = 0; i < songs.length; i++) {
-                    var songName = '#songName' + (i);
-                    var artistName = '#artistName' + i;
-                    var songPreview = '#songPreview' + i;
-                    var songCover = '#songCover' + i;
+                  for (var i = 0; i < data.length; i++) {
+                    var songName = '#songName' + (i+1);
+                    var artistName = '#artistName' + (i+1);
+                    var songPreview = '#songPreview' + (i+1);
+                    var songCover = '#songCover' + (i+1);
                     console.log(artistName);
-                    $(songName).html(songs[i].name);
-                    $(artistName).html(songs[i].artists[0].name); 
-                    $(songPreview).prop('src', songs[i].preview_url);
-                    $(songCover).prop('src', songs[i].album.images[0].url);
+                    $(songName).html(data[i].name);
+                    $(artistName).html(data[i].artists[0].name); 
+                    $(songPreview).prop('src', data[i].preview_url);
+                    $(songCover).prop('src', data[i].album.images[0].url);
                   }
               },
               error: function (XMLHttpRequest, textStatus, errorThrown) {
