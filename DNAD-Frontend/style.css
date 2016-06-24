@@ -1,0 +1,71 @@
+html, body {
+    width: 100%;
+    height: 100%;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+.player {
+	background: #404040;
+    border: 1px #909090 solid;
+    padding-bottom: 10px;
+}
+
+.button {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+
+.button:hover {
+    background-color: #4CAF50; /* Green */
+    color: black;
+}
+
+button.startButton {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    width: 100px;
+    height: 20px;
+    text-align: center;
+}
+
+.btn-default {
+    color: white;
+    background-color: #fff;
+    border-color: #ccc;
+    margin-left: 4%;
+}
+
+
+#loading {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('progress.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+body.loading {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading #loadingAjax {
+
+#loadingAjax{
+    display:    none;
+    position:   fixed;
+    z-index:    11000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+        url('progress.gif') 
+        50% 50% 
+}
+
+   

@@ -37,19 +37,19 @@ if __name__ == '__main__':
     )
 
     # Create a music researcher (grab songs from the internet)
-    researcher = Researcher(reader, spotify, mongo)
-    res_proc = Process(target=researcher.start)
-    res_proc.start()
+    # researcher = Researcher(reader, spotify, mongo)
+    # res_proc = Process(target=researcher.start)
+    # res_proc.start()
 
     # Create a music analyzer
-    #analyzer = Analyzer(mongo, spotify, config["search"])
+    analyzer = Analyzer(mongo, spotify, config["search"])
     #songs = analyzer.recommend(song)
     #utils.pretty_print(songs)
 
     # Create the communication API for the WebServer
-    #app = communication.create(analyzer)
-    #api = Process(target=app.run)
-    #api.start()
+    app = communication.create(analyzer)
+    api = Process(target=app.run)
+    api.start()
 
     # Exit code
     try:
@@ -58,6 +58,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         api.terminate()
         api.join()
-        res_proc.terminate()
-        res_proc.join()
+        # res_proc.terminate()
+        # res_proc.join()
         print "Processes successfully closed"
