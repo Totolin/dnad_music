@@ -20,12 +20,12 @@ def create(engine):
             abort(400)
 
         # Get the song name to be searched
-        #songname = request.json["song"]
+        songname = request.json["song"]
 
         # Tell engine to recommend 5 songs
-        #songs = analyzer.recommend(song)
+        songs = analyzer.recommend(song)
 
-        return jsonify({}), 200
+        return jsonify(songs), 200
 
     return app
 

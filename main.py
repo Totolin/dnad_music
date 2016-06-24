@@ -58,6 +58,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         api.terminate()
         api.join()
-        # res_proc.terminate()
-        # res_proc.join()
+        res_proc.terminate()
+        res_proc.join()
         print "Processes successfully closed"
