@@ -22,23 +22,31 @@ class Worker(Thread):
 def worker_job(song, spotify, mongo):
     # This is what the worker (1 thread) will execute
     # Using the song's name, send a request to Spotify
-    sp_qr = song["artist"] + ' - ' + song["title"]
-    result = spotify.get_song(sp_qr)
+    if (isinstance(song, basestring)):
+        # We received a randomly generated name
+        result = spotify.get_multiple(song)
 
-    # Error while calling API
-    if result is None:
-        print "[ERROR] Researching song: " + song["title"]
-        return
+        for song in result:
+            print 'Succesfully researched song ' + song["name"]
+            mongo.insert(song)
+    else:
+        sp_qr = song["artist"] + ' - ' + song["title"]
+        result = spotify.get_song(sp_qr)
 
-    # Song not found
-    if len(result) < 2:
-        print "[ERROR] Song not found in Spotify: " + song["title"]
-        return
+        # Error while calling API
+        if result is None:
+            print "[ERROR] Researching song: " + song["title"]
+            return
 
-    print 'Succesfully researched song: ' + song["artist"] + ' - ' + song["title"]
+        # Song not found
+        if len(result) < 2:
+            print "[ERROR] Song not found in Spotify: " + song["title"]
+            return
 
-    # Insert received song into the database
-    mongo.insert(result)
+        print 'Succesfully researched song: ' + song["artist"] + ' - ' + song["title"]
+
+        # Insert received song into the database
+        mongo.insert(result)
 
 
 class ThreadPool:

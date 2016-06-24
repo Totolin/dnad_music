@@ -1,8 +1,11 @@
+from random import randint
+
 class SongsReader:
 
-    def __init__(self, path, previous):
+    def __init__(self, path, words, previous):
         self.songs_path = path
         self.content = self.read()
+        self.words = words
 
         if previous is None:
             self.index = 0
@@ -28,12 +31,26 @@ class SongsReader:
         return songs
 
     def has_next(self):
-        return len(self.content) > 0
+        #return len(self.content) > 0
+
+        # Do we need a condition? We just generate random names forever
+        return True
 
     def next(self):
-        song = self.content[self.index]
-        self.index += 1
-        return song
+        if self.index < len(self.content):
+            # Send out names from the list of known songs
+            song = self.content[self.index]
+            self.index += 1
+            return song
+        else:
+            # Out of known songs, try generating names 
+            return self.get_random_name()
 
+    def get_random_name(self):
+        name = ""
+        for i in range(0, randint(1,3)):
+            index = randint(0, len(self.words)-1)
+            name += self.words[index] + " "
 
-#reader = SongsReader('unique_tracks.txt', None)
+        return name
+

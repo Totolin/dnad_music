@@ -1,6 +1,6 @@
 {
 	"files": {
-		"songs": "files/unique_tracks.txt"
+		"songs": "files/short_list.txt"
 	},
 	"spotify": {
 		"client_id": "1558f82001374593b4146feb191b0d0f",
@@ -9,7 +9,159 @@
 	"mongo": {
 		"url": "localhost",
 		"port": 27017,
-		"database": "Music",
-		"collection": "Raw"
-	}
+		"database": "music",
+		"collection": "research"
+	},
+	"search" : {
+	    "acousticness" : {
+	        "value" : 0.2,
+	        "array" : []
+	    },
+
+	    "danceability" : {
+	        "value" : 0.2,
+	        "array" : []
+	    },
+
+	    "energy" : {
+	        "value" : 0.2,
+	        "array" : []
+	    },
+
+	    "instrumentalness" : {
+	        "value" : 0.2,
+	        "array" : []
+	    },
+
+	    "loudness" : {
+	        "value" : -7,
+	        "array" : []
+	    },
+
+	    "speechiness" : {
+	        "value" : 0.2,
+	        "array" : []
+	    },
+
+	    "tempo" : {
+	        "value" : 40,
+	        "array" : []
+	    },
+
+	    "valence" : {
+	        "value" : 0.2,
+	        "array" : []
+	    }
+	},
+	"wordlist" : [
+		"Help",
+		"Love",
+		"Hate",
+		"Desperate",
+		"Open",
+		"Close",
+		"Baby",
+		"Girl",
+		"Yeah",
+		"Whoa",
+		"Start",
+		"Finish",
+		"Beginning",
+		"End",
+		"Fight",
+		"War",
+		"Running",
+		"Want",
+		"Need",
+		"Fire",
+		"Myself",
+		"Alive",
+		"Life",
+		"Dead",
+		"Death",
+		"Kill",
+		"Different",
+		"Alone",
+		"Lonely",
+		"Darkness",
+		"Home",
+		"Gone",
+		"Break",
+		"Heart",
+		"Floating",
+		"Searching",
+		"Dreaming",
+		"Serenity",
+		"Star",
+		"Recall",
+		"Think",
+		"Feel",
+		"Slow",
+		"Speed",
+		"Fast",
+		"World",
+		"Work",
+		"Miss",
+		"Stress",
+		"Please",
+		"More",
+		"Less",
+		"only",
+		"World",
+		"Moving",
+		"lasting",
+		"Rise",
+		"Save",
+		"Wake",
+		"Over",
+		"High",
+		"Above",
+		"Taking",
+		"Go",
+		"Why",
+		"Before",
+		"After",
+		"Along",
+		"See",
+		"Hear",
+		"Feel",
+		"Change",
+		"Body",
+		"Being",
+		"Soul",
+		"Spirit",
+		"God",
+		"Angel",
+		"Devil",
+		"Demon",
+		"Believe",
+		"Away",
+		"Everything",
+		"Shared",
+		"Something",
+		"Everything",
+		"Control",
+		"Heart",
+		"Away",
+		"Waiting",
+		"Loyalty",
+		"Shared",
+		"Remember",
+		"Yesterday",
+		"Today",
+		"Tomorrow",
+		"Fall",
+		"Memories",
+		"Apart",
+		"Time",
+		"Forever",
+		"Breath",
+		"Lie",
+		"Sleep",
+		"Inside",
+		"Outside",
+		"Catch",
+		"Be",
+		"Pretending"
+	]
 }

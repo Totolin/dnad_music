@@ -42,6 +42,32 @@ class SpotifyConnect:
 
         return song
 
+    def get_multiple(self, name):
+        # Get all results from Spotify
+        results = self.api.search(q=name, limit=19)
+
+        # Check if we got any
+        if len(results['tracks']['items']) <= 0:
+            return {}
+
+        # Extract the song we are interested in
+        songs = results['tracks']['items']
+
+        if (len(songs) < 2):
+            return {}
+
+        # Get the song's features from Spotify
+        for song in songs:
+            id = song['id']
+            features = self.api.audio_features(tracks=[id])
+            song['features'] = features[0]
+
+            # Convert it's ID to _ID (for uniqueness in mongo)
+            song['_id'] = id
+
+        return songs
+
+
     def download_song(self, url, filename):
         response = urllib2.urlopen(url)
         CHUNK = 16 * 1024

@@ -7,40 +7,42 @@ from sets import Set
 
 class Analyzer:
 
-    def __init__(self, manager):
+    def __init__(self, manager, spotify, config):
         self.dtb_manager = manager
+        self.spotify = spotify
         self.number = 5;
+        self.search = config
 
-    def recommend(self, song):
-        # Received a song to analyze
-        # Should return 5 recommended songs
+    # Received a song to analyze
+    # Should return 5 recommended songs
+    def recommend(self, name):
 
-        # Get the features ofthe song
+        # We only received the song name. Tell spotify to give us the data
+        song = self.spotify.get_song(name)
+
+        # It's possible Spotify doesn't know that song
+        if song is None or len(song) < 2:
+            return []
+
+        # Get the song's features
         features = song["features"]
         to_return = []
 
-        '''
-            Pune searchConfig in config.json, si da-l ca parametru din main
-            (unde e citit)
-        '''
-        search = utils.read_searchConfig()
-
-
         # Get all songs according to intervals
-        for i in search:
+        for i in self.search:
             if i == "loudness":
-                self.loudness_query(i, search[i], features[i])
+                self.loudness_query(i, self.search[i], features[i])
             elif i == "tempo":
-                self.tempo_query(i, search[i], features[i])
+                self.tempo_query(i, self.search[i], features[i])
             else:
-                self.other_query(i, search[i], features[i])
+                self.other_query(i, self.search[i], features[i])
 
         counter = {}
         to_sort = []
 
         # Give a score to each song by the number of occurences
-        for i in search:
-            for songs in search[i]["array"]:
+        for i in self.search:
+            for songs in self.search[i]["array"]:
                 if songs["id"] != song["id"]:
                     if songs["id"] in counter.keys():
                         counter[songs["id"]] += 1
@@ -51,14 +53,13 @@ class Analyzer:
         for count in counter.keys():
             to_sort.append({"id" : count, "counter" : counter[count]})
 
-        # Sort items by highest matching score
+        # Sort items by highest matching score based on intervals
         to_sort.sort(key=self.extract_counter, reverse=True)
 
+        # Extract only top 100 relevant songs
+        relevant = to_sort[:100]
 
-        '''
-            TODO: Return the top 5 songs, not the 100 not pearsoned 
-        '''
-        return to_sort[:100]
+        return self.top_songs(song, relevant, 5)
 
     def extract_counter(self, json):
         try:
@@ -165,14 +166,5 @@ class Analyzer:
         array.append(features["tempo"])
         array.append(features["valence"])
 
-'''
-    TOOD: Pune astea in main, trimite-l ca parametru
-'''
-#mongo = mongo.Mongo("localhost", 27017, "local", "songs")
-mongo = mongo.Mongo("localhost", 27017, "music", "research")
-analyzer = Analyzer(mongo)
 
-song = {"album" : { "album_type" : "album", "name" : "My World 2.0", "external_urls" : { "spotify" : "https://open.spotify.com/album/3BmcYMh0KYsimWL6p2gPa9" }, "uri" : "spotify:album:3BmcYMh0KYsimWL6p2gPa9", "href" : "https://api.spotify.com/v1/albums/3BmcYMh0KYsimWL6p2gPa9", "images" : [ { "url" : "https://i.scdn.co/image/ebc4de0afdb9d3126dea124538f5a7479fcac70b", "width" : 640, "height" : 640 }, { "url" : "https://i.scdn.co/image/24f1de6be0489bac031381df29ad3512d80cb4ef", "width" : 300, "height" : 300 }, { "url" : "https://i.scdn.co/image/5eaa3d2e49e629a1b24293ffd0bd75bbd83481df", "width" : 64, "height" : 64 } ], "type" : "album", "id" : "3BmcYMh0KYsimWL6p2gPa9", "available_markets" : [ "CA", "US" ] }, "name" : "Baby", "external_urls" : { "spotify" : "https://open.spotify.com/track/6epn3r7S14KUqlReYr77hA" }, "popularity" : 64, "uri" : "spotify:track:6epn3r7S14KUqlReYr77hA", "preview_url" : "https://p.scdn.co/mp3-preview/a7457c94f24ced0115c865b325e031ea6fb2a964", "disc_number" : 1, "href" : "https://api.spotify.com/v1/tracks/6epn3r7S14KUqlReYr77hA", "artists" : [ { "name" : "Justin Bieber", "external_urls" : { "spotify" : "https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s" }, "uri" : "spotify:artist:1uNFoZAHBGtllmzznpCI3s", "href" : "https://api.spotify.com/v1/artists/1uNFoZAHBGtllmzznpCI3s", "type" : "artist", "id" : "1uNFoZAHBGtllmzznpCI3s" }, { "name" : "Ludacris", "external_urls" : { "spotify" : "https://open.spotify.com/artist/3ipn9JLAPI5GUEo4y4jcoi" }, "uri" : "spotify:artist:3ipn9JLAPI5GUEo4y4jcoi", "href" : "https://api.spotify.com/v1/artists/3ipn9JLAPI5GUEo4y4jcoi", "type" : "artist", "id" : "3ipn9JLAPI5GUEo4y4jcoi" } ], "duration_ms" : 214240, "external_ids" : { "isrc" : "USUM70919263" }, "track_number" : 1, "type" : "track", "id" : "6epn3r7S14KUqlReYr77hA", "available_markets" : [ "CA", "US" ], "features" : { "key" : 5, "analysis_url" : "https://api.spotify.com/v1/audio-analysis/6epn3r7S14KUqlReYr77hA", "energy" : 0.841, "liveness" : 0.122, "tempo" : 65.024, "speechiness" : 0.232, "uri" : "spotify:track:6epn3r7S14KUqlReYr77hA", "acousticness" : 0.0544, "danceability" : 0.656, "track_href" : "https://api.spotify.com/v1/tracks/6epn3r7S14KUqlReYr77hA", "time_signature" : 4, "duration_ms" : 214240, "loudness" : -5.183, "mode" : 0, "valence" : 0.519, "type" : "audio_features", "id" : "6epn3r7S14KUqlReYr77hA", "instrumentalness" : 0 } }
-songs = analyzer.recommend(song)
 
-utils.pretty_print(analyzer.top_songs(song, songs, len(songs))[0])
